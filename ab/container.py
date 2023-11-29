@@ -10,7 +10,7 @@ def getFrames(container: av.container.Container):
     return container.decode(container.streams.video[0])
 
 def getPackets(container: av.container.Container):
-    return container.decode(container.streams.video[0])
+    return container.demux(container.streams.video[0])
 
 def copyCodecContext(source: av.container.Container, destination: av.container.Container):
     # AUDIO ------------------
