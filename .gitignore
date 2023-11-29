@@ -1,0 +1,7 @@
+/movies/
+/out/
+__pycache__
+
+*.jpg
+
+/PyAV/
