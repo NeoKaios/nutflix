@@ -1,7 +1,7 @@
 import av
 import av.container
 from enum import Enum
-from slash import slash
+from ab.slash import slash
 
 class PathType(str, Enum):
     MOVIE = f'movies{slash}'

@@ -1,8 +1,8 @@
 import av
 import av.container
 from typing import List
-from watermarks.interface import ABMarkInterface
-from container import *
+from ab.watermarks.interface import ABMarkInterface
+from ab.container import *
 
 def setupABMoviesFiles(title: str, source_container: av.container.Container):
     movA = av.open(f'{PathType.OUT}{title}-A.mp4', 'w')

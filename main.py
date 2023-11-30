@@ -1,13 +1,13 @@
-import sys
-sys.path.append('./ab')
-sys.path.append('./ab/watermarks/')
-
 from ab.movies import createABMovies
-from ab.server import makeMarkedMovie
+from ab.server import makeMarkedMovie, markedMovieReader
 from ab.watermarks.dummy import ABMarkDummy
+from ab.watermarks.onepixel import ABMarkOnePixel
 
 
-mark = ABMarkDummy()
+mark = ABMarkOnePixel()
 # createABMovies('coca', mark)
-makeMarkedMovie('coca-' + mark.getMethodName(), 10)
+title = makeMarkedMovie('coca-' + mark.getMethodName(), 12)
+
+read = markedMovieReader(title, mark)
+print(f'READ ID="{read}"')
 

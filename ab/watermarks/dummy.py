@@ -1,6 +1,6 @@
 from numpy import ndarray,flipud
 from typing import Tuple
-from interface import ABMarkInterface
+from ab.watermarks.interface import ABMarkInterface
 
 class ABMarkDummy(ABMarkInterface):
     def createABImage(self, image: ndarray) -> Tuple[ndarray, ndarray]:

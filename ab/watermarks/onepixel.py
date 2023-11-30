@@ -1,6 +1,6 @@
 import numpy as np
 from typing import Tuple
-from interface import ABMarkInterface
+from ab.watermarks.interface import ABMarkInterface
 
 class ABMarkOnePixel(ABMarkInterface):
     def createABImage(self, image: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
