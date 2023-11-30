@@ -1,10 +1,11 @@
 import av
 import av.container
 from enum import Enum
+from slash import slash
 
 class PathType(str, Enum):
-    MOVIE = 'movies/'
-    OUT = 'out/'
+    MOVIE = f'movies{slash}'
+    OUT = f'out{slash}'
 
 def getFrames(container: av.container.Container):
     return container.decode(container.streams.video[0])
