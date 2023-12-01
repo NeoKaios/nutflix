@@ -6,6 +6,7 @@ from ab.slash import slash
 class PathType(str, Enum):
     MOVIE = f'movies{slash}'
     OUT = f'out{slash}'
+    ATTACK = f'attacks{slash}'
 
 def getFrames(container: av.container.Container):
     return container.decode(container.streams.video[0])

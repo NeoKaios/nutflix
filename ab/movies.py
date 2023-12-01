@@ -1,3 +1,4 @@
+import os
 import av
 import av.container
 from typing import List
@@ -19,10 +20,16 @@ def setupABMoviesFiles(title: str, source_container: av.container.Container):
 
     return movA, movB
 
-def createABMovies(title: str, mark: ABMarkInterface):
+def createABMovies(title: str, mark: ABMarkInterface, overwrite: bool = False):
+    titleAndMethod = title + '-' + mark.getMethodName()
+    movieAExists = os.path.isfile(f'{PathType.OUT}{titleAndMethod}-A.mp4')
+    movieBExists = os.path.isfile(f'{PathType.OUT}{titleAndMethod}-B.mp4')
+    if(not overwrite and movieAExists and movieBExists):
+        return
+
     src = av.open(f'{PathType.MOVIE}{title}.mp4')
 
-    movA, movB = setupABMoviesFiles(title + '-' + mark.getMethodName(), src)
+    movA, movB = setupABMoviesFiles(titleAndMethod, src)
 
     frames = getFrames(src)
 
