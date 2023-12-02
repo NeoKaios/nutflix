@@ -33,7 +33,9 @@ def createABMovies(title: str, mark: ABMarkInterface, overwrite: bool = False):
 
     frames = getFrames(src)
 
-    for frame in frames:
+    for idx,frame in enumerate(frames):
+        if(idx%24==0):
+            print(f"Created {idx//24}s of A/B movies")
         # Create A/B frames
         image = frame.to_ndarray(format='rgb24')
         imageA,imageB = mark.createABImage(image)
