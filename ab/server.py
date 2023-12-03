@@ -68,34 +68,31 @@ def makeMarkedMovie(title: str, id: int, overwrite: bool = False) -> str:
 
 def markedMovieReader(title: str, mark: ABMarkInterface) -> int:
     print('Decoding '+title)
-    src = av.open(f'{PathType.OUT}{title}.mp4')
-    vid = src.streams.video[0]
-    print(vid.duration,vid.time_base)
-    for idx,p in enumerate(getPackets(src)):
-        if(idx%nbFrameMarked == 0 and idx > 0):
-            print(p.pts,p.dts, sep='~',end='__')
-            # print('\n')
-    print('ended')
-    print('ended')
-    print('ended')
-    print('ended')
-    print('ended')
-    print('ended')
-    src.close()
+    # src = av.open(f'{PathType.OUT}{title}.mp4')
+    # vid = src.streams.video[0]
+    # print(vid.duration,vid.time_base)
+    # src.close()
 
     src = av.open(f'{PathType.OUT}{title}.mp4')
     accBits = []
     readId = 0
 
+    ptss = [0]
+    sho = []
+    i=0
     for idx,frame in enumerate(getFrames(src)):
+        i=idx
         if(idx>treshold):
             continue
-        image = frame.to_ndarray(format='rgb24')
+        sho+=[frame.pts - ptss[-1]]
+        ptss+=[frame.pts]
+        image = frame.to_ndarray(format=mark.formatUsed())
         if(idx%nbFrameMarked == 0 and idx > 0):
             summed = sum(accBits)
             readBit = 0 if summed < nbFrameMarked/2 else 1
-            print(frame.pts,frame.dts, sep='~',end='__')
+            # print(frame.pts,frame.dts, sep='~',end='__')
             # print(f'\nCurrent val {frame.pts} {frame.dts}')
+            print(accBits)
             print(f'{idx//24}s read {readBit} ({accBits.count(0)}/{accBits.count(1)})')
 
             readId += 2**(idx//nbFrameMarked - 1) * readBit
@@ -106,6 +103,7 @@ def markedMovieReader(title: str, mark: ABMarkInterface) -> int:
         bitFound = mark.readFrame(image)
         accBits.append(bitFound)
 
+    print("nb frames:", i)
     summed = sum(accBits)
     readBit = 0 if summed < nbFrameMarked/2 else 1
     print(f'extra  read {readBit} ({accBits.count(0)}/{accBits.count(1)})')
@@ -121,7 +119,7 @@ def markedMovieReaderLogless(title: str, mark: ABMarkInterface) -> int:
     for idx,frame in enumerate(getFrames(src)):
         if(idx>treshold):
             continue
-        image = frame.to_ndarray(format='rgb24')
+        image = frame.to_ndarray(format=mark.formatUsed())
         if(idx%nbFrameMarked == 0 and idx > 0):
             summed = sum(accBits)
             readBit = 0 if summed < nbFrameMarked/2 else 1
@@ -142,7 +140,7 @@ def slowmakeMarkedMovie(title: str, id: int, overwrite: bool = False) -> str:
     titleMarkedMovie = f'{title}-{id}'
     markedMovieExists = os.path.isfile(f'{PathType.OUT}{titleMarkedMovie}.mp4')
     if(markedMovieExists and not overwrite):
-        print(f'Movie exists as {titleMarkedMovie}.mp4')
+        print(f'Marked movie exists as {titleMarkedMovie}.mp4')
         return titleMarkedMovie
 
     movA = av.open(f'{PathType.OUT}{title}-A.mp4')

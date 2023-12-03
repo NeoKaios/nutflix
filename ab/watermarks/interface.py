@@ -14,3 +14,6 @@ class ABMarkInterface(ABC):
     @abstractmethod
     def getMethodName(self) -> str:
         pass
+
+    def formatUsed(self) -> str:
+        return 'rgb24'

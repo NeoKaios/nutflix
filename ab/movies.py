@@ -25,6 +25,7 @@ def createABMovies(title: str, mark: ABMarkInterface, overwrite: bool = False):
     movieAExists = os.path.isfile(f'{PathType.OUT}{titleAndMethod}-A.mp4')
     movieBExists = os.path.isfile(f'{PathType.OUT}{titleAndMethod}-B.mp4')
     if(not overwrite and movieAExists and movieBExists):
+        print(f'A/B movies exists as {titleAndMethod}-A.mp4/{titleAndMethod}-B.mp4')
         return
 
     src = av.open(f'{PathType.MOVIE}{title}.mp4')
@@ -37,11 +38,11 @@ def createABMovies(title: str, mark: ABMarkInterface, overwrite: bool = False):
         if(idx%24==0):
             print(f"Created {idx//24}s of A/B movies")
         # Create A/B frames
-        image = frame.to_ndarray(format='rgb24')
+        image = frame.to_ndarray(format=mark.formatUsed())
         imageA,imageB = mark.createABImage(image)
         # Encode frame in file
         for (imageX,movX) in [(imageA,movA),(imageB, movB)]:
-            frameX = av.VideoFrame.from_ndarray(imageX, 'rgb24')
+            frameX = av.VideoFrame.from_ndarray(imageX, mark.formatUsed())
             packetX = movX.streams.video[0].encode(frameX)
             movX.mux(packetX)
 
