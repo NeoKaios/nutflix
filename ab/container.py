@@ -26,5 +26,4 @@ def copyCodecContext(source: av.container.Container, destination: av.container.C
     video_out.width = video_in.codec_context.width  # Set frame width to be the same as the width of the input audio_in
     video_out.height = video_in.codec_context.height  # Set frame height to be the same as the height of the input audio_in
     video_out.pix_fmt = video_in.codec_context.pix_fmt  # Copy pixel format from input audio_in to out audio_in
-    video_out.options = {'crf': '23'}  # Select low crf for high quality (the price is larger file size).
-
+    video_out.options = {'crf': '23', 'x264-params': 'keyint=24:min-keyint=24:scenecut=0' }  # Select low crf for high quality (the price is larger file size).

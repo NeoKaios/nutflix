@@ -1,22 +1,14 @@
 import os
-import read
+from ab.container import *
 
-filename = 'coca'
-input_file = f'movies/{filename}.mp4'
-def output_file(i):
-    return f'out/{filename}-{i}.mp4'
-
-# Create compressed files
-for i in range(23, 51):
-    os.system(f'ffmpeg -loglevel quiet -i {input_file} -c:v libx264 -crf {i} {output_file(i)}')
-
-# Reading mark
-mark = read.read(input_file)
-for i in range(23, 51):
-    file = output_file(i)
-    print(f'Reading file {file}')
-    found = read.read(file)
-    if (found and found == mark):
-        print(f'SUCC: Found mark in file {i}')
-    else:
-        print(f'FAIL: Unable to find mark')
+def attackMovie(title, crf):
+    output_file = f'{PathType.ATTACK}{title}-CRF{crf}'
+    file =  output_file
+    output_file = PathType.OUT + output_file
+    if(os.path.isfile(f'{output_file}.mp4')):
+        print('Movie exists with crf ' + str(crf))
+        return file
+    # Create compressed files
+    os.system(f'ffmpeg -loglevel quiet -i {PathType.OUT}{title}.mp4 -c:v libx264 -crf {crf} {output_file}.mp4')
+    print('Movie attacked with crf ' + str(crf))
+    return file
